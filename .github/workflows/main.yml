@@ -36,7 +36,7 @@ jobs:
         if: always()
         uses: appleboy/ssh-action@master
         with:
-          script: | # 命令中的 & 表示在后台运行进
+          script: | # 命令中的 & 表示在后台运行
             pid = $(pidof java) && if [$pid!=""];then kill $pid;fi && cd actions && nohup java -jar github-action.jar &
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USER }}
