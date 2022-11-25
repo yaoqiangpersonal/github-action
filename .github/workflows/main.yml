@@ -37,7 +37,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           script: | # 命令中的 & 表示在后台运行
-            cd actions && nohup java -jar github-action.jar &
+            cd actions && nohup java -jar github-action.jar & && exit
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
