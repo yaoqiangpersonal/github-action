@@ -1,0 +1,43 @@
+name: Java CI with Maven
+
+on:
+  push:
+    # 分支
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    name: Running Java ${{ matrix.java }} compile
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: maven
+      - name: compile
+        run: mvn compile
+      - name: Generate the package
+        run: mvn -B package --file pom.xml -Dmaven.test.skip=true
+      - name: deployment
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: target/github-action-0.0.1-SNAPSHOT.jar
+          remote: actions/github-action.jar
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+      - name: run springboot
+        if: always()
+        uses: appleboy/ssh-action@master
+        with:
+          script: | # 命令中的 & 表示在后台运行进
+            pid = $(pidof java) && if [$pid!=""];then kill $pid;fi && cd actions && nohup java -jar github-action.jar &
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
