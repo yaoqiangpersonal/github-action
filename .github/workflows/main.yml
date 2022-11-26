@@ -36,7 +36,7 @@ jobs:
         if: always()
         uses: appleboy/ssh-action@master
         with:
-          script: | # 命令中的 & 表示在后台运
+          script: | # 命令中的 & 表示在后台
             cd actions && bash test.sh
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USER }}
