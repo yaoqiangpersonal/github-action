@@ -8,6 +8,6 @@ public class ActionsController {
 
 	@GetMapping("actions")
 	public String actions(){
-		return "use github actions success------";
+		return "auto ci/cd";
 	}
 }
