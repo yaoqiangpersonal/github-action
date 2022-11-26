@@ -8,6 +8,6 @@ public class ActionsController {
 
 	@GetMapping("actions")
 	public String actions(){
-		return "auto ci/cd";
+		return "auto ci/cd----";
 	}
 }
