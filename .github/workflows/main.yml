@@ -34,7 +34,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
       - name: run springboot
         if: always()
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@dce9d565de8d876c11d93fa4fe677c0285a66d78
         with:
           script: | # 命令中的 & 表示在后
             cd actions && bash test.sh
