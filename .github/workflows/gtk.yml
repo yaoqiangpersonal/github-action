@@ -70,6 +70,7 @@ jobs:
       - name: Set up GKE credentials
         run: |-
           gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+          gcloud container clusters list --project $PROJECT_ID
 
       # Build the Docker image
       - name: Build
