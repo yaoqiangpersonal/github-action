@@ -46,8 +46,14 @@ jobs:
           distribution: 'temurin'
           server-id: github
           settings-path: ${{ github.workspace }}
+          cache: 'maven'
       - name: Build with Maven
-        run: mvn clean package -DskipTests
+        run: |
+          mvn package -DskipTests
+          cd target
+          mv *.jar app.jar
+          java -Djarmode=layertools -jar app.jar extract --destination app
+          cd app && ls
 
       # Alternative option - authentication via credentials json
       - id: 'auth'
@@ -73,7 +79,7 @@ jobs:
             --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
-            .
+            target/app
       # Push the Docker image to Google Artifact Registry
       - name: Publish
         run: |-

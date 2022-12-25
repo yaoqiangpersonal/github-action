@@ -1,8 +1,3 @@
-FROM wonderd/jre-alpine as builder
-WORKDIR application
-COPY target/*.jar application.jar
-RUN java -Djarmode=layertools -jar application.jar extract
-
 FROM wonderd/jre-alpine
 WORKDIR application
 COPY --from=builder application/dependencies/ ./
