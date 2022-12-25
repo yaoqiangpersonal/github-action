@@ -1,0 +1,21 @@
+FROM wonderd/jre-alpine as builder
+WORKDIR application
+COPY target/*.jar application.jar
+RUN java -Djarmode=layertools -jar application.jar extract
+
+FROM wonderd/jre-alpine
+WORKDIR application
+COPY target/classes/ca.crt ca.crt
+COPY --from=builder application/dependencies/ ./
+COPY --from=builder application/snapshot-dependencies/ ./
+COPY --from=builder application/spring-boot-loader/ ./
+COPY --from=builder application/application/ ./
+ENV TZ="Asia/Shanghai"
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
+    && keytool -import -noprompt -trustcacerts -alias ca -storepass "changeit"  -cacerts  -file "ca.crt"
+ENV JVM_OPTS="-XX:MaxRAMPercentage=80.0" \
+ 	JAVA_OPTS="-Dfile.encoding=utf8 -Xmx512m" \
+ 	NACOS_HOST="nacos:8848" \
+ 	NAMESPACE_ID="6937773b-63e4-4f61-afcd-91591d10b04d" \
+ 	PROFILES_ACTIVE="pro"
+ENTRYPOINT ["sh","-c","java $JVM_OPTS $JAVA_OPTS org.springframework.boot.loader.JarLauncher"]
