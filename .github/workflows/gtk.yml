@@ -40,7 +40,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup JDK 17
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: 'temurin'
@@ -55,11 +55,12 @@ jobs:
           java -Djarmode=layertools -jar app.jar extract --destination app
           cd app && ls
 
-      # Alternative option - authentication via credentials json
       - id: 'auth'
+        name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
-           credentials_json: '${{ secrets.GKE_SA_KEY }}'
+          workload_identity_provider: 'projects/543717480087/locations/global/workloadIdentityPools/demo/providers/demo'
+          service_account: '543717480087-compute@developer.gserviceaccount.com'
       # Setup gcloud CLI
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -67,6 +68,7 @@ jobs:
       - name: Docker configuration
         run: |-
           gcloud --quiet auth configure-docker $GAR_LOCATION-docker.pkg.dev
+
       # Get the GKE credentials so we can deploy to the cluster
       - name: Set up GKE credentials
         run: |-
