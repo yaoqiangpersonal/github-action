@@ -60,7 +60,7 @@ jobs:
         uses: 'google-github-actions/auth@v1'
         with:
           workload_identity_provider: 'projects/543717480087/locations/global/workloadIdentityPools/demo/providers/demo'
-          service_account: '543717480087-compute@developer.gserviceaccount.com'
+          service_account: 'github@rare-ridge-372207.iam.gserviceaccount.com'
       # Setup gcloud CLI
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
