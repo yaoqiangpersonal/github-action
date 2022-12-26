@@ -99,6 +99,10 @@ jobs:
           tar -xvf kustomize_v4.5.7_linux_amd64.tar
           chmod u+x ./kustomize
       # Deploy the Docker image to the GKE cluster
+      - name: Install Google Auth Plugin
+        run: |-
+          gcloud components install gke-gcloud-auth-plugin
+
       - name: Deploy
         run: |-
           # replacing the image name in the k8s template
