@@ -1,9 +1,9 @@
 FROM wonderd/jre-alpine
 WORKDIR application
-COPY --from=builder application/dependencies/ ./
-COPY --from=builder application/snapshot-dependencies/ ./
-COPY --from=builder application/spring-boot-loader/ ./
-COPY --from=builder application/application/ ./
+COPY dependencies/ ./
+COPY snapshot-dependencies/ ./
+COPY spring-boot-loader/ ./
+COPY application/ ./
 ENV TZ="Asia/Shanghai"
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
 ENV JVM_OPTS="-XX:MaxRAMPercentage=80.0" \
