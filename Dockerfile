@@ -2,6 +2,7 @@ FROM wonderd/jre-alpine
 WORKDIR application
 COPY dependencies/ ./
 COPY snapshot-dependencies/ ./
+RUN ls
 COPY spring-boot-loader/ ./
 COPY application/ ./
 ENV TZ="Asia/Shanghai"
